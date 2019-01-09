@@ -11,7 +11,19 @@ npm install --save lodash-unwind
 ```
 # Usage
 
-## unwind(collection, field)
+```javascript
+unwind(collection, path, [options={}])
+```
+### Arguments
+- ```collection(Array)``` - The collection to process.
+- ```path(string)``` - The property path to unwind.
+- ```[options={}](object)``` - The option object.
+- ```[options.ignoreNonArray=true](boolean)``` - Specify whether ignore non-array element/property, default=true.
+
+### Returns
+```(Array)``` - Returns new unwinded collection.
+
+### Sample
 
 ```javascript
 const unwind = require('lodash-unwind')()

@@ -2,7 +2,7 @@
  * @Author: edwin
  * @Date:   2019-01-09 16:09:23
  * @Last Modified by: edwin
- * @Last Modified At: 2019-01-09 18:30:32
+ * @Last Modified At: 2019-01-09 20:10:09
  */
 const expect = require('chai').expect
 
@@ -42,6 +42,21 @@ const nestedCollection = [
   }
 ]
 
+const collectionWithNonArrayElement = [
+  {
+    a: 234,
+    id: 'a1'
+  },
+  {
+    a: [ 3, 4 ],
+    id: 'a2'
+  }
+]
+
+const invalidCollection = {
+  a: 1234
+}
+
 const mongooseCollection = [
   {
     a: {
@@ -49,8 +64,9 @@ const mongooseCollection = [
     },
     id: 'a1',
     toJSON: function () {
-      delete this.toJSON
-      return this
+      let res = Object.assign({}, this)
+      delete res.toJSON
+      return res
     } // Simulate the mongoose doc
   },
   {
@@ -59,8 +75,9 @@ const mongooseCollection = [
     },
     id: 'a2',
     toObject: function () {
-      delete this.toObject
-      return this
+      let res = Object.assign({}, this)
+      delete res.toObject
+      return res
     }
   },
   {
@@ -69,8 +86,9 @@ const mongooseCollection = [
     },
     id: 'a3',
     toJSON: function () {
-      delete this.toJSON
-      return this
+      let res = Object.assign({}, this)
+      delete res.toJSON
+      return res
     }
   }
 ]
@@ -107,6 +125,18 @@ describe('Use unwind as module', () => {
     const output = unwind(mongooseCollection, 'a.inner')
     assertNested(output)
   })
+  it('should return empty collection if source is NOT an array', () => {
+    const output = unwind(invalidCollection, 'a')
+    expect(output).to.be.an('array').that.have.lengthOf(0)
+  })
+  it('should ignore non array element', () => {
+    const output = unwind(collectionWithNonArrayElement, 'a')
+    expect(output).to.be.an('array').that.have.lengthOf(2)
+  })
+  it('should return origin data if option.ignoreNonArray === false', () => {
+    const output = unwind(collectionWithNonArrayElement, 'a', { ignoreNonArray: false })
+    expect(output).to.be.an('array').that.have.lengthOf(3)
+  })
 })
 
 describe('Use unwind as lodash extension', () => {
@@ -123,5 +153,17 @@ describe('Use unwind as lodash extension', () => {
   it('should return unwind collection with mongoose collection', () => {
     const output = _.unwind(mongooseCollection, 'a.inner')
     assertNested(output)
+  })
+  it('should return empty collection if source is NOT an array', () => {
+    const output = _.unwind(invalidCollection, 'a')
+    expect(output).to.be.an('array').that.have.lengthOf(0)
+  })
+  it('should ignore non array element', () => {
+    const output = _.unwind(collectionWithNonArrayElement, 'a')
+    expect(output).to.be.an('array').that.have.lengthOf(2)
+  })
+  it('should return origin data if option.ignoreNonArray === false', () => {
+    const output = _.unwind(collectionWithNonArrayElement, 'a', { ignoreNonArray: false })
+    expect(output).to.be.an('array').that.have.lengthOf(3)
   })
 })

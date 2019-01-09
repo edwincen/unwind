@@ -2,36 +2,41 @@
  * @Author: edwin
  * @Date:   2019-01-09 15:34:30
  * @Last Modified by: edwin
- * @Last Modified At: 2019-01-09 18:30:07
+ * @Last Modified At: 2019-01-09 20:10:02
  */
 const _ = require.main.require('lodash')
 
 const transformDoc = (doc) => {
-  let newDoc = doc
+  let cloned
   if (typeof doc.toObject === 'function') {
-    newDoc = doc.toObject()
+    cloned = doc.toObject()
   } else if (typeof doc.toJSON === 'function') {
-    newDoc = doc.toJSON()
+    cloned = doc.toJSON()
+  } else {
+    cloned = doc
   }
-  return newDoc
+  return _.cloneDeep(cloned)
 }
 
-const unwind = (array, field) => {
+const unwind = (array, field, options = { ignoreNonArray: true }) => {
   const res = []
   if (_.isArray(array)) {
     array.forEach(item => {
-      let tmp = transformDoc(item)
-      const subArray = _.get(tmp, field)
+      const subArray = _.get(item, field)
       if (_.isArray(subArray)) {
         subArray.forEach(i => {
-          let cloned = _.cloneDeep(tmp)
+          let cloned = transformDoc(item)
           res.push(_.set(cloned, field, i))
         })
+      } else {
+        if (!options.ignoreNonArray) {
+          res.push(transformDoc(item))
+        }
       }
     })
     return res
   } else {
-    return array
+    return options.ignoreNonArray ? [] : array
   }
 }
 
