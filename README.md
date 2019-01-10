@@ -15,7 +15,7 @@ npm install --save lodash-unwind
 unwind(collection, path, [options={}])
 ```
 ### Arguments
-- ```collection(Array)``` - The collection to process.
+- ```collection(Array|Object)``` - The collection or object to process.
 - ```path(string)``` - The property path to unwind.
 - ```[options={}](object)``` - The option object.
 - ```[options.ignoreNonArray=true](boolean)``` - Specify whether ignore non-array element/property, default=true.
@@ -24,6 +24,8 @@ unwind(collection, path, [options={}])
 ```(Array)``` - Returns new unwinded collection.
 
 ### Sample
+
+- #### Unwind normal collection
 
 ```javascript
 const unwind = require('lodash-unwind')()
@@ -54,6 +56,64 @@ const output = unwind(data, 'a')
 //   {
 //     a: 4,
 //     id: 'a2'
+//   }
+// ]
+```
+- #### Unwind collection with nested property
+
+```javascript
+const unwind = require('lodash-unwind')()
+const data = [
+  {
+    a: {
+        inner: [ 1, 2 ]
+    },
+    id: 'a1'
+  },
+  {
+    a: {
+        inner: [ 3, 4 ]
+    },
+    id: 'a2'
+  }
+]
+const output = unwind(data, 'a')
+// [
+//   {
+//     a: { inner: 1 },
+//     id: 'a1'
+//   },
+//   {
+//     a: { inner: 2 },
+//     id: 'a1'
+//   },
+//   {
+//     a: { inner: 3 },
+//     id: 'a2'
+//   },
+//   {
+//     a: { inner: 4 },
+//     id: 'a2'
+//   }
+// ]
+```
+
+- #### Unwind object
+```javascript
+const unwind = require('lodash-unwind')()
+const data = {
+  a: [ 1, 2 ],
+  id: 'a1'
+}
+const output = unwind(data, 'a')
+// [
+//   {
+//     a: 1,
+//     id: 'a1'
+//   },
+//   {
+//     a: 2,
+//     id: 'a1'
 //   }
 // ]
 ```
