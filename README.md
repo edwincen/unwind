@@ -1,6 +1,6 @@
 # lodash-unwind
 
-[![Build Status](https://travis-ci.com/edwincen/unwind.svg?branch=master)](https://travis-ci.com/edwincen/unwind)
+[![Build Status](https://travis-ci.com/edwincen/unwind.svg?branch=master)](https://travis-ci.com/edwincen/unwind) [![Greenkeeper badge](https://badges.greenkeeper.io/edwincen/unwind.svg)](https://greenkeeper.io/)
 
 Very simple unwind extension for lodash. And it's compatible with mongoose doc.
 
