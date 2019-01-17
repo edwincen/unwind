@@ -2,7 +2,7 @@
  * @Author: edwin
  * @Date:   2019-01-09 15:34:30
  * @Last Modified by: edwin
- * @Last Modified At: 2019-01-10 11:22:32
+ * @Last Modified At: 2019-01-17 11:37:35
  */
 const _ = require.main.require('lodash')
 
@@ -23,7 +23,11 @@ const unwindCore = (target, source, field, options) => {
   if (_.isArray(subArray)) {
     subArray.forEach(i => {
       let cloned = transformDoc(source)
-      target.push(_.set(cloned, field, i))
+      let val = i
+      if (options.wrapAsArray) {
+        val = [ i ]
+      }
+      target.push(_.set(cloned, field, val))
     })
   } else {
     if (!options.ignoreNonArray) {
@@ -46,7 +50,7 @@ const unwindObject = (object, field, options) => {
   return res
 }
 
-const unwind = (source, field, options = { ignoreNonArray: true }) => {
+const unwind = (source, field, options = { ignoreNonArray: true, wrapAsArray: false }) => {
   let func = () => { return [] }
   if (_.isArray(source)) {
     func = unwindCollection

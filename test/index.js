@@ -2,7 +2,7 @@
  * @Author: edwin
  * @Date:   2019-01-09 16:09:23
  * @Last Modified by: edwin
- * @Last Modified At: 2019-01-10 11:16:00
+ * @Last Modified At: 2019-01-17 11:39:49
  */
 const expect = require('chai').expect
 
@@ -153,6 +153,21 @@ const executeTest = (func) => {
   it('should return unwinded collection when source is an nested object', () => {
     const output = func(nestedObjectWithCollection, 'a.inner')
     assertNested(output)
+  })
+  it('should return unwinded collection with value wrapped as array', () => {
+    const output = func(nestedObjectWithCollection, 'a.inner', { wrapAsArray: true })
+    expect(output).to.deep.include({ a: { inner: [1] }, id: 'a1' })
+    expect(output).to.deep.include({ a: { inner: [2] }, id: 'a1' })
+    expect(output).to.deep.include({ a: { inner: [3] }, id: 'a1' })
+    expect(output).to.deep.include({ a: { inner: [4] }, id: 'a1' })
+  })
+  it('should return unwinded collection with value wrapped as array', () => {
+    const output = func(objectWithCollection, 'a', { wrapAsArray: true })
+    expect(output).to.deep.include({ a: [1], id: 'a1' })
+    expect(output).to.deep.include({ a: [2], id: 'a1' })
+    expect(output).to.deep.include({ a: [3], id: 'a1' })
+    expect(output).to.deep.include({ a: [4], id: 'a1' })
+    expect(output.filter(i => i.id === 'a1')).to.have.lengthOf(4)
   })
 }
 
