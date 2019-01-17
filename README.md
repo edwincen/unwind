@@ -20,13 +20,14 @@ unwind(collection, path, [options={}])
 - ```path(string)``` - The property path to unwind.
 - ```[options={}](object)``` - The option object.
 - ```[options.ignoreNonArray=true](boolean)``` - Specify whether ignore non-array element/property, default=true.
+- ```[options.wrapAsArray=false]``` - Specify whether wrap unwinded value in array.
 
 ### Returns
 ```(Array)``` - Returns new unwinded collection.
 
 ### Sample
 
-- #### Unwind normal collection
+#### Unwind normal collection
 
 ```javascript
 const unwind = require('lodash-unwind')()
@@ -60,7 +61,7 @@ const output = unwind(data, 'a')
 //   }
 // ]
 ```
-- #### Unwind collection with nested property
+#### Unwind collection with nested property
 
 ```javascript
 const unwind = require('lodash-unwind')()
@@ -99,7 +100,7 @@ const output = unwind(data, 'a')
 // ]
 ```
 
-- #### Unwind object
+#### Unwind object
 ```javascript
 const unwind = require('lodash-unwind')()
 const data = {
@@ -114,6 +115,26 @@ const output = unwind(data, 'a')
 //   },
 //   {
 //     a: 2,
+//     id: 'a1'
+//   }
+// ]
+```
+
+#### Unwind with wrapAsArray=true
+```javascript
+const unwind = require('lodash-unwind')()
+const data = {
+  a: [ 1, 2 ],
+  id: 'a1'
+}
+const output = unwind(data, 'a', { wrapAsArray: true })
+// [
+//   {
+//     a: [1],
+//     id: 'a1'
+//   },
+//   {
+//     a: [2],
 //     id: 'a1'
 //   }
 // ]
