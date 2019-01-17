@@ -1,6 +1,6 @@
 {
   "name": "lodash-unwind",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "A very simple lodash extension that provide MongoDB $unwind feature",
   "main": "index.js",
   "scripts": {
